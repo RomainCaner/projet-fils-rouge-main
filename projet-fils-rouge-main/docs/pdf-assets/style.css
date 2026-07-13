@@ -1,0 +1,145 @@
+/* =====================================================================
+   Feuille de style « Cyna » — documents PDF (WeasyPrint)
+   Rendu moderne, soigné, façon rapport professionnel.
+   ===================================================================== */
+
+/* --- Pages & en-têtes / pieds --- */
+@page {
+  size: A4;
+  margin: 2.3cm 2cm 2cm 2cm;
+  @top-left  { content: "CYNA · Projet fil rouge"; font-family: "DejaVu Sans"; font-size: 8pt; color: #9aa3ad; }
+  @top-right { content: string(doctitle);          font-family: "DejaVu Sans"; font-size: 8pt; color: #9aa3ad; }
+  @bottom-right { content: counter(page) " / " counter(pages); font-family: "DejaVu Sans"; font-size: 8.5pt; color: #9aa3ad; }
+  @bottom-left  { content: "Cyna — Cybersécurité SaaS"; font-family: "DejaVu Sans"; font-size: 8pt; color: #c2c8ce; }
+}
+/* Couverture : sans marges ni en-têtes */
+@page :first {
+  margin: 0;
+  @top-left { content: none; } @top-right { content: none; }
+  @bottom-left { content: none; } @bottom-right { content: none; }
+}
+
+/* --- Corps --- */
+body {
+  font-family: "DejaVu Sans", sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.5;
+  color: #1c2531;
+}
+
+/* --- Page de couverture (bloc titre pandoc) --- */
+#title-block-header {
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 4cm 2.5cm 3cm 2.5cm;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  border-top: 1.1cm solid #10b981;
+  page-break-after: always;
+}
+#title-block-header::before {
+  content: "CYNA";
+  display: block;
+  font-weight: 700;
+  font-size: 40pt;
+  letter-spacing: 4px;
+  color: #10b981;
+  margin-bottom: 0.2cm;
+}
+#title-block-header::after {
+  content: "Solutions de cybersécurité SaaS — SOC · EDR · XDR";
+  display: block;
+  font-size: 11pt;
+  color: #9aa3ad;
+  margin-bottom: 3cm;
+}
+h1.title {
+  string-set: doctitle content();
+  font-size: 30pt;
+  font-weight: 700;
+  color: #112233;
+  border-top: 3px solid #10b981;
+  border-bottom: 3px solid #10b981;
+  padding: 0.5cm 0;
+  margin: 0 0 0.5cm 0;
+}
+p.subtitle { font-size: 15pt; color: #667380; margin: 0 0 3cm 0; }
+p.author {
+  font-size: 12.5pt; color: #112233; font-weight: 700;
+  margin: 0.2cm 0 0 0;
+}
+p.date { font-size: 10pt; color: #9aa3ad; margin-top: 0.4cm; }
+
+/* --- Sommaire --- */
+nav#TOC { page-break-after: always; }
+nav#TOC::before {
+  content: "Sommaire";
+  display: block;
+  font-size: 20pt; font-weight: 700; color: #112233;
+  border-bottom: 2px solid #10b981;
+  padding-bottom: 0.2cm; margin-bottom: 0.6cm;
+}
+nav#TOC ul { list-style: none; padding-left: 0; }
+nav#TOC ul ul { padding-left: 1.1em; }
+nav#TOC li { margin: 3px 0; }
+nav#TOC a { text-decoration: none; color: #2a3948; }
+
+/* --- Titres --- */
+h1, h2, h3, h4 { font-family: "DejaVu Sans"; break-after: avoid; }
+h1 {
+  font-size: 18pt; color: #0f9d6f;
+  border-bottom: 2px solid #d8f3e8; padding-bottom: 4px;
+  margin-top: 1.1em; margin-bottom: 0.5em;
+}
+h2 { font-size: 14pt; color: #112233; margin-top: 1em; }
+h3 { font-size: 12pt; color: #223345; }
+h4 { font-size: 11pt; color: #37485a; }
+
+/* --- Paragraphes, listes --- */
+p { margin: 0.35em 0; }
+ul, ol { margin: 0.35em 0; padding-left: 1.3em; }
+li { margin: 2px 0; }
+strong { color: #0e1b28; }
+
+/* --- Liens --- */
+a { color: #0b6e52; }
+
+/* --- Tableaux --- */
+table {
+  border-collapse: collapse; width: 100%;
+  margin: 0.7em 0; font-size: 9.5pt;
+  break-inside: auto;
+}
+thead { display: table-header-group; }
+th {
+  background: #10b981; color: #ffffff; text-align: left;
+  padding: 6px 9px; font-weight: 700;
+}
+td { border-bottom: 1px solid #e4eaf0; padding: 6px 9px; vertical-align: top; }
+tr { break-inside: avoid; }
+tbody tr:nth-child(even) td { background: #f5fbf8; }
+
+/* --- Code --- */
+pre {
+  background: #f6f8fa; border: 1px solid #e4eaf0; border-left: 3px solid #10b981;
+  border-radius: 4px; padding: 10px 12px; font-size: 8.7pt;
+  white-space: pre-wrap; word-break: break-word; break-inside: avoid;
+}
+code { font-family: "DejaVu Sans Mono"; font-size: 8.7pt; }
+:not(pre) > code {
+  background: #eef3f7; color: #0b6e52; padding: 1px 5px; border-radius: 3px;
+}
+
+/* --- Citations / encarts --- */
+blockquote {
+  border-left: 4px solid #10b981; background: #f5fbf8;
+  margin: 0.6em 0; padding: 6px 14px; color: #37485a;
+}
+
+/* --- Images / schémas --- */
+img { max-width: 100%; display: block; margin: 0.9em auto; break-inside: avoid; }
+
+/* --- Filet horizontal --- */
+hr { border: none; border-top: 1px solid #e4eaf0; margin: 1.2em 0; }

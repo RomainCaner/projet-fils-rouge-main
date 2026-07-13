@@ -1,0 +1,23 @@
+# Réécriture de toutes les requêtes vers le Front Controller (index.php),
+# sauf les fichiers et dossiers réellement existants (assets, uploads).
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS en production (commenter en local si pas de certificat).
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Empêche l'exécution de PHP dans le dossier des uploads (défense en profondeur).
+<FilesMatch "\.(php|phtml|phar)$">
+    <If "%{REQUEST_URI} =~ m#^/uploads/#">
+        Require all denied
+    </If>
+</FilesMatch>
+
+# Désactive l'affichage du listing des répertoires.
+Options -Indexes

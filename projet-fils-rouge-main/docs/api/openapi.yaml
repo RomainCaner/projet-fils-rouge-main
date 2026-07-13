@@ -1,0 +1,531 @@
+openapi: 3.0.3
+info:
+  title: API Cyna — Plateforme e-commerce SaaS
+  description: >
+    Documentation des points d'accès HTTP de la plateforme Cyna (site web
+    e-commerce et back-office). L'application PHP est rendue côté serveur : la
+    plupart des réponses sont en `text/html`, les mutations répondent par une
+    redirection (302) après traitement. Les endpoints marqués `application/json`
+    sont consommés en asynchrone par le front (tableau de bord, actions panier).
+
+    Sécurité transverse :
+      - toutes les requêtes `POST` exigent un jeton CSRF `_token` (champ de
+        formulaire) ;
+      - les routes `/compte/**` requièrent une session authentifiée ;
+      - les routes `/admin/**` requièrent une session administrateur validée en 2FA.
+  version: 1.0.0
+  contact:
+    name: Équipe projet Cyna
+    email: contact@cyna-it.fr
+  license:
+    name: Propriétaire
+
+servers:
+  - url: https://cyna.example.com
+    description: Production
+  - url: http://localhost:8080
+    description: Développement local
+
+tags:
+  - name: Public
+    description: Pages publiques (catalogue, recherche, contenu)
+  - name: Panier
+    description: Gestion du panier (session, connecté ou invité)
+  - name: Authentification
+    description: Inscription, connexion, réinitialisation
+  - name: Checkout
+    description: Tunnel de commande et paiement
+  - name: Compte
+    description: Espace client (authentification requise)
+  - name: Admin
+    description: Back-office (administrateur + 2FA requis)
+
+paths:
+  /:
+    get:
+      tags: [Public]
+      summary: Page d'accueil
+      description: Carrousel, texte fixe, grille de catégories et top produits.
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+
+  /categorie/{slug}:
+    get:
+      tags: [Public]
+      summary: Catalogue d'une catégorie
+      parameters:
+        - $ref: '#/components/parameters/Slug'
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /service/{slug}:
+    get:
+      tags: [Public]
+      summary: Fiche d'un service SaaS
+      parameters:
+        - $ref: '#/components/parameters/Slug'
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /recherche:
+    get:
+      tags: [Public]
+      summary: Recherche avancée à facettes
+      parameters:
+        - { name: q, in: query, schema: { type: string }, description: Texte recherché (titre/description) }
+        - { name: categories, in: query, schema: { type: array, items: { type: integer } }, description: Filtre catégories }
+        - { name: price_min, in: query, schema: { type: integer }, description: Prix minimum (centimes) }
+        - { name: price_max, in: query, schema: { type: integer }, description: Prix maximum (centimes) }
+        - { name: available_only, in: query, schema: { type: boolean }, description: Uniquement les services disponibles }
+        - { name: sort, in: query, schema: { type: string, enum: [price, newness, availability] } }
+        - { name: dir, in: query, schema: { type: string, enum: [asc, desc] } }
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+
+  /langue/{locale}:
+    get:
+      tags: [Public]
+      summary: Changer de langue (i18n)
+      parameters:
+        - { name: locale, in: path, required: true, schema: { type: string, enum: [fr, en] } }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /contact:
+    get:
+      tags: [Public]
+      summary: Formulaire de contact
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+    post:
+      tags: [Public]
+      summary: Envoyer un message de contact
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [email, sujet, corps, _token]
+              properties:
+                email: { type: string, format: email }
+                sujet: { type: string }
+                corps: { type: string }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+        '403': { $ref: '#/components/responses/Csrf' }
+
+  /panier:
+    get:
+      tags: [Panier]
+      summary: Afficher le panier
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+
+  /panier/ajouter:
+    post:
+      tags: [Panier]
+      summary: Ajouter un service au panier
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [product_id, period, _token]
+              properties:
+                product_id: { type: integer }
+                period: { type: string, enum: [monthly, annual] }
+                quantity: { type: integer, default: 1 }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+        '403': { $ref: '#/components/responses/Csrf' }
+
+  /panier/modifier:
+    post:
+      tags: [Panier]
+      summary: Modifier la quantité d'une ligne
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [product_id, period, quantity, _token]
+              properties:
+                product_id: { type: integer }
+                period: { type: string, enum: [monthly, annual] }
+                quantity: { type: integer }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /panier/supprimer:
+    post:
+      tags: [Panier]
+      summary: Retirer une ligne du panier
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [product_id, period, _token]
+              properties:
+                product_id: { type: integer }
+                period: { type: string, enum: [monthly, annual] }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /inscription:
+    get:
+      tags: [Authentification]
+      summary: Formulaire d'inscription
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+    post:
+      tags: [Authentification]
+      summary: Créer un compte
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [name, email, password, password_confirmation, _token]
+              properties:
+                name: { type: string }
+                email: { type: string, format: email }
+                password: { type: string, description: 8+ car., maj/min/chiffre/spécial }
+                password_confirmation: { type: string }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+        '403': { $ref: '#/components/responses/Csrf' }
+
+  /connexion:
+    get:
+      tags: [Authentification]
+      summary: Formulaire de connexion
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+    post:
+      tags: [Authentification]
+      summary: Se connecter
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [email, password, _token]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+                remember: { type: boolean, description: « Se souvenir de moi » }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /mot-de-passe-oublie:
+    get:
+      tags: [Authentification]
+      summary: Formulaire « mot de passe oublié »
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+    post:
+      tags: [Authentification]
+      summary: Demander un lien de réinitialisation
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [email, _token]
+              properties:
+                email: { type: string, format: email }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /reinitialiser/{token}:
+    get:
+      tags: [Authentification]
+      summary: Formulaire de nouveau mot de passe
+      parameters:
+        - { name: token, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /confirmation/{token}:
+    get:
+      tags: [Authentification]
+      summary: Confirmer l'adresse e-mail
+      parameters:
+        - { name: token, in: path, required: true, schema: { type: string } }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /deconnexion:
+    post:
+      tags: [Authentification]
+      summary: Se déconnecter
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /checkout:
+    get:
+      tags: [Checkout]
+      summary: Afficher le tunnel de commande
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+    post:
+      tags: [Checkout]
+      summary: Traiter la commande et le paiement
+      description: Crée un PaymentIntent Stripe, enregistre la commande et les abonnements.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [_token]
+              properties:
+                billing_name: { type: string }
+                billing_line1: { type: string }
+                billing_city: { type: string }
+                billing_postal_code: { type: string }
+                billing_country: { type: string }
+                payment_intent: { type: string, description: Identifiant Stripe }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /checkout/confirmation/{invoice}:
+    get:
+      tags: [Checkout]
+      summary: Page de confirmation de commande
+      parameters:
+        - { name: invoice, in: path, required: true, schema: { type: string }, description: Numéro de facture }
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+
+  /compte:
+    get:
+      tags: [Compte]
+      summary: Tableau de bord client
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /compte/commandes:
+    get:
+      tags: [Compte]
+      summary: Historique des commandes (groupé par année)
+      security: [{ sessionAuth: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+
+  /compte/commandes/{id}/facture:
+    get:
+      tags: [Compte]
+      summary: Télécharger la facture PDF d'une commande
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Facture au format PDF
+          content:
+            application/pdf:
+              schema: { type: string, format: binary }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /compte/abonnements/{id}/resilier:
+    post:
+      tags: [Compte]
+      summary: Résilier un abonnement
+      security: [{ sessionAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /admin/connexion:
+    post:
+      tags: [Admin]
+      summary: Connexion administrateur (étape 1 — identifiants)
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [email, password, _token]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /admin/2fa:
+    post:
+      tags: [Admin]
+      summary: Connexion administrateur (étape 2 — code TOTP)
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [code, _token]
+              properties:
+                code: { type: string, description: Code TOTP à 6 chiffres }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /admin/statistiques:
+    get:
+      tags: [Admin]
+      summary: Données du tableau de bord (JSON)
+      security: [{ adminAuth: [] }]
+      responses:
+        '200':
+          description: Séries pour les graphiques du tableau de bord
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sales_by_day:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date: { type: string, format: date }
+                        total_cents: { type: integer }
+                  sales_by_category:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        category: { type: string }
+                        total_cents: { type: integer }
+
+  /admin/produits:
+    get:
+      tags: [Admin]
+      summary: Lister les produits (triable, recherche)
+      security: [{ adminAuth: [] }]
+      responses:
+        '200': { $ref: '#/components/responses/HtmlPage' }
+    post:
+      tags: [Admin]
+      summary: Créer un produit
+      security: [{ adminAuth: [] }]
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /admin/produits/suppression:
+    post:
+      tags: [Admin]
+      summary: Suppression multiple de produits
+      security: [{ adminAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [ids, _token]
+              properties:
+                ids: { type: array, items: { type: integer } }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+  /admin/commandes/{id}/statut:
+    post:
+      tags: [Admin]
+      summary: Mettre à jour le statut d'une commande
+      security: [{ adminAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [statut, _token]
+              properties:
+                statut: { type: string, enum: [pending, paid, active, renewed, cancelled, failed] }
+                _token: { $ref: '#/components/schemas/CsrfToken' }
+      responses:
+        '302': { $ref: '#/components/responses/Redirect' }
+
+components:
+  parameters:
+    Slug:
+      name: slug
+      in: path
+      required: true
+      schema: { type: string }
+      description: Identifiant d'URL (slug)
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer }
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, default: 1, minimum: 1 }
+      description: Numéro de page (pagination)
+
+  schemas:
+    CsrfToken:
+      type: string
+      description: Jeton anti-CSRF unique par session (champ caché `_token`).
+
+  responses:
+    HtmlPage:
+      description: Page HTML rendue côté serveur
+      content:
+        text/html:
+          schema: { type: string }
+    Redirect:
+      description: Redirection (302) après traitement, avec message flash
+    NotFound:
+      description: Ressource introuvable
+      content:
+        text/html:
+          schema: { type: string }
+    Csrf:
+      description: Jeton CSRF manquant ou invalide (403)
+    Unauthorized:
+      description: Authentification requise (redirection vers la connexion)
+
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: cyna_session
+      description: Session client authentifiée.
+    adminAuth:
+      type: apiKey
+      in: cookie
+      name: cyna_session
+      description: Session administrateur validée par 2FA TOTP.

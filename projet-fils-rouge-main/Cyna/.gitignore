@@ -1,0 +1,33 @@
+# Configuration locale (ne jamais committer les secrets)
+.env
+# Surcharge Docker locale (monte le .env local avec les vraies clés)
+docker-compose.override.yml
+
+# Dépendances éventuelles (PHPUnit installé en dev uniquement)
+/vendor/
+/composer.lock
+
+# Cache et rapports de tests
+/.phpunit.cache/
+/coverage/
+
+# Données générées à l'exécution
+/storage/logs/*.log
+/storage/invoices/*.pdf
+/storage/cache/*
+
+# Uploads (images produits/carrousel envoyées via le back-office)
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# Fichiers d'environnement / éditeurs
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# On conserve la structure des dossiers vides
+!/storage/logs/.gitkeep
+!/storage/invoices/.gitkeep
+!/storage/cache/.gitkeep

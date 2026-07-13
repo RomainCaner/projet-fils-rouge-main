@@ -1,0 +1,48 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cyna SOC Enterprise">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A1124"/><stop offset="1" stop-color="#1C1838"/>
+    </linearGradient>
+    <radialGradient id="g" cx="50%" cy="36%" r="60%">
+      <stop offset="0" stop-color="#F59E0B" stop-opacity="0.22"/><stop offset="1" stop-color="#F59E0B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="scr" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1A2140"/><stop offset="1" stop-color="#11162C"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#2A2B4A" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect width="800" height="600" fill="url(#grid)" opacity="0.5"/>
+  <rect width="800" height="600" fill="url(#g)"/>
+
+  <text x="40" y="60" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="5" fill="#F59E0B">CYNA</text>
+  <g transform="translate(610,42)"><rect width="150" height="30" rx="15" fill="#F59E0B"/><text x="75" y="20" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#231300" text-anchor="middle">SOC • ENTERPRISE</text></g>
+
+  <!-- dual screens -->
+  <g transform="translate(120,130)">
+    <rect width="300" height="230" rx="12" fill="url(#scr)" stroke="#3A3D63" stroke-width="2"/>
+    <rect x="0" y="0" width="300" height="34" rx="12" fill="#1A2140"/>
+    <text x="16" y="22" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#C9A75A">Threat Hunting</text>
+    <g stroke="#F59E0B" stroke-width="3" fill="none">
+      <polyline points="24,180 70,140 116,160 162,110 208,130 270,90"/>
+    </g>
+    <g fill="#FBBF24"><circle cx="70" cy="140" r="4"/><circle cx="162" cy="110" r="4"/><circle cx="270" cy="90" r="4"/></g>
+    <rect x="24" y="56" width="252" height="10" rx="5" fill="#2A2B4A"/><rect x="24" y="56" width="180" height="10" rx="5" fill="#F59E0B"/>
+  </g>
+  <g transform="translate(440,170)">
+    <rect width="250" height="195" rx="12" fill="url(#scr)" stroke="#3A3D63" stroke-width="2"/>
+    <rect x="0" y="0" width="250" height="32" rx="12" fill="#1A2140"/>
+    <text x="14" y="21" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#C9A75A">Analystes dédiés</text>
+    <g font-family="Segoe UI, Arial, sans-serif">
+      <rect x="16" y="48" width="100" height="56" rx="8" fill="#11162C" stroke="#3A3D63"/><text x="28" y="70" font-size="12" fill="#9AA0C0">SLA</text><text x="28" y="92" font-size="18" font-weight="700" fill="#FBBF24">15 min</text>
+      <rect x="134" y="48" width="100" height="56" rx="8" fill="#11162C" stroke="#3A3D63"/><text x="146" y="70" font-size="12" fill="#9AA0C0">Sources</text><text x="146" y="92" font-size="16" font-weight="700" fill="#fff">∞</text>
+    </g>
+    <text x="16" y="140" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#9AA0C0">Intégration SOAR active</text>
+    <circle cx="222" cy="135" r="7" fill="#22C55E"/>
+  </g>
+
+  <text x="40" y="480" font-family="Segoe UI, Arial, sans-serif" font-size="44" font-weight="800" fill="#F1F5F9">Cyna SOC Enterprise</text>
+  <text x="40" y="520" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#C7CBE0">SOC managé haute capacité pour grands comptes.</text>
+</svg>

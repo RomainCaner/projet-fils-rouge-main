@@ -1,0 +1,38 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SOC — Security Operations Center">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A1124"/>
+      <stop offset="1" stop-color="#13294C"/>
+    </linearGradient>
+    <radialGradient id="g" cx="50%" cy="38%" r="60%">
+      <stop offset="0" stop-color="#38BDF8" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#38BDF8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sweep" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#38BDF8" stop-opacity="0"/>
+      <stop offset="1" stop-color="#38BDF8" stop-opacity="0.5"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#1C335A" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect width="800" height="600" fill="url(#grid)" opacity="0.5"/>
+  <rect width="800" height="600" fill="url(#g)"/>
+
+  <g transform="translate(400,250)">
+    <g fill="none" stroke="#1F4B7A" stroke-width="2">
+      <circle r="55"/><circle r="105"/><circle r="155"/>
+    </g>
+    <path d="M0 0 L155 -46 A155 155 0 0 1 155 46 Z" fill="url(#sweep)"/>
+    <line x1="0" y1="0" x2="155" y2="0" stroke="#38BDF8" stroke-width="3"/>
+    <circle cx="95" cy="-40" r="8" fill="#22C55E"/>
+    <circle cx="-60" cy="70" r="8" fill="#F59E0B"/>
+    <circle cx="40" cy="110" r="8" fill="#EF4444"/>
+    <circle r="10" fill="#38BDF8"/>
+  </g>
+
+  <text x="400" y="470" font-family="Segoe UI, Arial, sans-serif" font-size="84" font-weight="800" fill="#F1F5F9" text-anchor="middle" letter-spacing="4">SOC</text>
+  <text x="400" y="510" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#7FA8D9" text-anchor="middle" letter-spacing="2">Security Operations Center</text>
+  <text x="40" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="5" fill="#38BDF8">CYNA</text>
+</svg>

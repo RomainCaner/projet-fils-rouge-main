@@ -1,0 +1,57 @@
+name: CI — Cyna
+
+# Intégration continue : à chaque push / pull request, on vérifie la syntaxe PHP,
+# on exécute la suite PHPUnit du site web et les tests JUnit de l'application Java.
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # --- Site web PHP --------------------------------------------------------
+  php-tests:
+    name: Tests PHP (PHPUnit)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Cyna
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo, pdo_mysql, mbstring, curl, gd
+          tools: composer
+          coverage: none
+
+      - name: Vérifier la syntaxe PHP (lint)
+        run: |
+          find src public bootstrap routes -name '*.php' -print0 \
+            | xargs -0 -n1 php -l
+
+      - name: Installer les dépendances de développement
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Exécuter PHPUnit
+        run: composer test
+
+  # --- Application Java Swing ---------------------------------------------
+  java-tests:
+    name: Tests Java (JUnit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Compiler et exécuter les tests
+        run: mvn -B test

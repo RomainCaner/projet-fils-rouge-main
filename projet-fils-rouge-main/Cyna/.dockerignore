@@ -1,0 +1,7 @@
+.git
+.gitignore
+docs
+README.md
+storage/logs/*
+storage/cache/*
+.env

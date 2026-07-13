@@ -1,0 +1,68 @@
+# ===========================================================================
+# Orchestration de l'environnement de développement Sentryx.
+#   • web : application PHP/Apache (image construite via le Dockerfile)
+#   • db  : MySQL 8, initialisée automatiquement avec schema.sql + seed.sql
+#
+# Démarrage :   docker compose up -d --build
+# Site :        http://localhost:8080
+# ===========================================================================
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      # Code monté en direct (les modifications sont prises en compte sans rebuild).
+      - ./:/var/www/html
+      # Configuration spécifique Docker (surcharge le .env local XAMPP).
+      - ./.env.docker:/var/www/html/.env:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  # Serveur SMTP de test : capture tous les e-mails sortants.
+  # Interface web : http://localhost:8025
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"   # interface web (consultation des e-mails)
+      - "1025:1025"   # SMTP (réception depuis l'application)
+
+  # Interface web d'administration de la base de données.
+  # Accès : http://localhost:8081  (serveur prérempli sur "db")
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 64M
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: bsi
+      MYSQL_USER: sentryx
+      MYSQL_PASSWORD: sentryx_secret
+      MYSQL_ROOT_PASSWORD: root_secret
+    ports:
+      # 3307 côté hôte pour ne pas entrer en conflit avec MySQL de XAMPP (3306).
+      - "3307:3306"
+    volumes:
+      - sentryx_mysql:/var/lib/mysql
+      # Scripts joués une seule fois, à la création de la base.
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot_secret"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+volumes:
+  sentryx_mysql:

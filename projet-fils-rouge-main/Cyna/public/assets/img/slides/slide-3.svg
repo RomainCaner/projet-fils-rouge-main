@@ -1,0 +1,56 @@
+<svg viewBox="0 0 1600 640" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Réponse automatisée">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A1124"/>
+      <stop offset="0.6" stop-color="#10203A"/>
+      <stop offset="1" stop-color="#0C2A24"/>
+    </linearGradient>
+    <radialGradient id="glow3" cx="74%" cy="42%" r="55%">
+      <stop offset="0" stop-color="#22C55E" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#22C55E" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lock" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#34D399"/>
+      <stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <pattern id="grid3" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0 H0 V44" fill="none" stroke="#1B3450" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="640" fill="url(#bg)"/>
+  <rect width="1600" height="640" fill="url(#grid3)" opacity="0.5"/>
+  <rect width="1600" height="640" fill="url(#glow3)"/>
+
+  <g transform="translate(120,90)">
+    <text font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="6" fill="#34D399">C Y N A</text>
+    <text y="20" font-family="Segoe UI, Arial, sans-serif" font-size="14" letter-spacing="2" fill="#7C93B8">ENDPOINT DETECTION &amp; RESPONSE</text>
+  </g>
+
+  <g transform="translate(120,250)" font-family="Segoe UI, Arial, sans-serif">
+    <text font-size="74" font-weight="800" fill="#F1F5F9">Réponse</text>
+    <text y="86" font-size="74" font-weight="800" fill="#34D399">automatisée</text>
+    <text y="150" font-size="28" fill="#A9B9D4">Bloquez les menaces avant qu'elles ne se propagent.</text>
+    <g transform="translate(0,200)">
+      <rect width="220" height="58" rx="29" fill="#10B981"/>
+      <text x="110" y="37" font-size="20" font-weight="700" fill="#FFFFFF" text-anchor="middle">Voir l'EDR</text>
+    </g>
+  </g>
+
+  <!-- Lock + automation orbit -->
+  <g transform="translate(1190,320)">
+    <circle r="225" fill="none" stroke="#1F4E45" stroke-width="2" stroke-dasharray="10 14"/>
+    <circle r="165" fill="#34D399" opacity="0.08"/>
+    <g transform="translate(0,-8)">
+      <rect x="-95" y="-20" width="190" height="160" rx="22" fill="url(#lock)"/>
+      <path d="M-55 -20 V-58 A55 55 0 0 1 55 -58 V-20" fill="none" stroke="#34D399" stroke-width="22"/>
+      <circle cy="50" r="20" fill="#063B2E"/>
+      <rect x="-9" y="50" width="18" height="46" rx="9" fill="#063B2E"/>
+    </g>
+    <g fill="#34D399">
+      <circle cx="0" cy="-225" r="10"/>
+      <circle cx="195" cy="112" r="10"/>
+      <circle cx="-195" cy="112" r="10"/>
+    </g>
+  </g>
+</svg>

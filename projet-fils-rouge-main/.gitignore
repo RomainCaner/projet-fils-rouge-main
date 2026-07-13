@@ -1,0 +1,14 @@
+# --- Build Java / Maven ---
+target/
+*.class
+# Sous-produit du plugin maven-shade
+dependency-reduced-pom.xml
+
+# --- IDE ---
+.idea/
+*.iml
+.vscode/
+
+# --- OS ---
+Thumbs.db
+.DS_Store

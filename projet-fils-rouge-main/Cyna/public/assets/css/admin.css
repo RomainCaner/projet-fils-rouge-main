@@ -1,0 +1,53 @@
+/* ===========================================================================
+   CYNA — Styles du back-office. S'appuie sur design-system.css.
+   Mise en page à barre latérale, barre supérieure, tableaux et tableau de bord.
+   =========================================================================== */
+
+.admin-shell { display: flex; flex: 1; min-height: 100vh; }
+
+/* --- Barre latérale ------------------------------------------------------- */
+.admin-sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--color-surface);
+    border-inline-end: 1px solid var(--color-border);
+    padding: var(--space-5) var(--space-4);
+}
+.admin-sidebar .logo { font-size: 1.3rem; }
+.admin-sidebar .logo span { color: var(--color-text-muted); font-weight: 400; font-size: 0.9rem; }
+.admin-nav { list-style: none; padding: 0; margin-block-start: var(--space-5); display: grid; gap: var(--space-1); }
+.admin-nav a { display: block; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); color: var(--color-text); }
+.admin-nav a:hover { background: var(--color-surface-2); text-decoration: none; }
+.admin-nav a[aria-current="page"] { background: var(--color-primary); color: var(--color-on-primary); font-weight: 600; }
+
+/* --- Zone principale ------------------------------------------------------ */
+.admin-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.admin-topbar {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-surface);
+    border-block-end: 1px solid var(--color-border);
+}
+.admin-topbar__title { margin: 0; font-size: 1.3rem; }
+.admin-topbar__user { display: flex; align-items: center; gap: var(--space-3); }
+.admin-content { padding: var(--space-5); flex: 1; }
+
+/* --- Barre d'outils de liste ---------------------------------------------- */
+.admin-toolbar { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin-block-end: var(--space-4); }
+.admin-search { display: flex; gap: var(--space-2); flex: 1; min-width: 220px; }
+.admin-search input { flex: 1; }
+
+/* --- Tableau de bord ------------------------------------------------------ */
+.admin-cards { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-block-end: var(--space-5); }
+.admin-kpi { font-size: 1.8rem; font-weight: 800; color: var(--color-primary); margin: 0; }
+.admin-period { display: flex; align-items: center; gap: var(--space-2); margin-block-end: var(--space-5); flex-wrap: wrap; }
+.admin-charts { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
+.admin-charts canvas { width: 100%; }
+@media (min-width: 900px) { .admin-charts { grid-template-columns: 1fr 1fr; } }
+
+/* --- Responsive : barre latérale repliée en haut sur petit écran ---------- */
+@media (max-width: 760px) {
+    .admin-shell { flex-direction: column; }
+    .admin-sidebar { width: 100%; border-inline-end: 0; border-block-end: 1px solid var(--color-border); }
+    .admin-nav { grid-auto-flow: column; grid-auto-columns: max-content; overflow-x: auto; }
+}

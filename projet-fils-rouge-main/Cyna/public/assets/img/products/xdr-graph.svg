@@ -1,0 +1,52 @@
+<svg viewBox="0 0 1200 750" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Graphe de corrélation XDR">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A1124"/><stop offset="1" stop-color="#1B1640"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#8B5CF6" stop-opacity="0.30"/><stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="core" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A78BFA"/><stop offset="1" stop-color="#7C3AED"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="750" fill="url(#bg)"/>
+  <rect width="1200" height="750" fill="url(#halo)"/>
+
+  <text x="48" y="64" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="800" fill="#F1F5F9">Graphe de corrélation des menaces</text>
+  <text x="48" y="96" font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#B7A6E6">Cyna XDR — vision unifiée multi-domaines</text>
+
+  <g transform="translate(600,420)" font-family="Segoe UI, Arial, sans-serif">
+    <!-- edges -->
+    <g stroke="#3C2F6B" stroke-width="2">
+      <line x1="0" y1="0" x2="-330" y2="-170"/><line x1="0" y1="0" x2="-380" y2="40"/>
+      <line x1="0" y1="0" x2="-250" y2="200"/><line x1="0" y1="0" x2="60" y2="250"/>
+      <line x1="0" y1="0" x2="330" y2="180"/><line x1="0" y1="0" x2="380" y2="-30"/>
+      <line x1="0" y1="0" x2="220" y2="-200"/><line x1="0" y1="0" x2="-120" y2="-240"/>
+      <line x1="-330" y1="-170" x2="-120" y2="-240"/><line x1="330" y1="180" x2="60" y2="250"/>
+      <line x1="380" y1="-30" x2="220" y2="-200"/>
+    </g>
+    <!-- satellite nodes -->
+    <g font-size="13" text-anchor="middle" fill="#C4B5FD">
+      <g transform="translate(-330,-170)"><circle r="26" fill="#1E1A40" stroke="#A78BFA" stroke-width="2"/><text y="5">IP</text></g>
+      <g transform="translate(-380,40)"><circle r="26" fill="#1E1A40" stroke="#A78BFA" stroke-width="2"/><text y="5">User</text></g>
+      <g transform="translate(-250,200)"><circle r="26" fill="#1E1A40" stroke="#A78BFA" stroke-width="2"/><text y="5">Host</text></g>
+      <g transform="translate(60,250)"><circle r="26" fill="#3B1D1D" stroke="#EF4444" stroke-width="2"/><text y="5" fill="#FCA5A5">Mal</text></g>
+      <g transform="translate(330,180)"><circle r="26" fill="#1E1A40" stroke="#A78BFA" stroke-width="2"/><text y="5">DNS</text></g>
+      <g transform="translate(380,-30)"><circle r="26" fill="#1E1A40" stroke="#A78BFA" stroke-width="2"/><text y="5">File</text></g>
+      <g transform="translate(220,-200)"><circle r="26" fill="#3B2A0E" stroke="#F59E0B" stroke-width="2"/><text y="5" fill="#FCD34D">C2</text></g>
+      <g transform="translate(-120,-240)"><circle r="26" fill="#1E1A40" stroke="#A78BFA" stroke-width="2"/><text y="5">Mail</text></g>
+    </g>
+    <!-- core incident -->
+    <circle r="58" fill="url(#core)" stroke="#C4B5FD" stroke-width="3"/>
+    <text y="-2" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">INCIDENT</text>
+    <text y="20" font-size="12" fill="#E9E2FF" text-anchor="middle">#4827</text>
+  </g>
+
+  <!-- legend -->
+  <g font-family="Segoe UI, Arial, sans-serif" font-size="15" transform="translate(48,660)">
+    <circle cx="10" cy="-5" r="8" fill="#7C3AED"/><text x="28" y="0" fill="#C4B5FD">Incident corrélé</text>
+    <circle cx="220" cy="-5" r="8" fill="#EF4444"/><text x="238" y="0" fill="#FCA5A5">Entité malveillante</text>
+    <circle cx="470" cy="-5" r="8" fill="#F59E0B"/><text x="488" y="0" fill="#FCD34D">Indicateur suspect</text>
+  </g>
+</svg>

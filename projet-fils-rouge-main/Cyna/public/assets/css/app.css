@@ -1,0 +1,145 @@
+/* ===========================================================================
+   CYNA — Styles du front-office (en-tête, navigation, accueil, catalogue,
+   panier, tunnel de commande, espace client). S'appuie sur design-system.css.
+   =========================================================================== */
+
+.main-content { flex: 1; padding-block: var(--space-6); }
+
+/* --- En-tête -------------------------------------------------------------- */
+.site-header { background: var(--color-surface); border-block-end: 1px solid var(--color-border); position: sticky; inset-block-start: 0; z-index: 50; box-shadow: var(--shadow); }
+.site-header__inner { display: flex; align-items: center; flex-wrap: wrap; row-gap: var(--space-3); gap: var(--space-4); padding-block: var(--space-4); }
+.logo { font-family: var(--font-mono); font-size: 1.35rem; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--color-primary); white-space: nowrap; }
+.logo:hover { text-decoration: none; }
+
+/* Mobile : la recherche occupe sa propre ligne, en pleine largeur. */
+.search { display: flex; order: 3; flex: 1 1 100%; max-width: none; }
+@media (min-width: 860px) {
+    .search { order: 0; flex: 1 1 auto; max-width: 460px; }
+}
+.search input { flex: 1; min-height: var(--tap-target); padding-inline: var(--space-4); border: 1px solid var(--color-border); border-start-start-radius: 999px; border-end-start-radius: 999px; background: var(--color-bg); color: var(--color-text); }
+.search input:focus { border-color: var(--color-primary); outline: none; }
+.search button { min-width: 3rem; border: 1px solid var(--color-primary); background: var(--color-primary); color: var(--color-on-primary); border-start-end-radius: 999px; border-end-end-radius: 999px; font-size: 1.2rem; cursor: pointer; }
+.search button:hover { background: var(--color-primary-strong); border-color: var(--color-primary-strong); }
+
+.site-header__actions { display: flex; align-items: center; gap: var(--space-2); margin-inline-start: auto; }
+.cart-link { position: relative; font-size: 1.4rem; min-width: var(--tap-target); min-height: var(--tap-target); display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); }
+.cart-link:hover { background: var(--color-surface-2); text-decoration: none; }
+.cart-badge { position: absolute; inset-block-start: 6px; inset-inline-end: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--color-primary); border: 2px solid var(--color-surface); }
+
+.burger { display: inline-flex; flex-direction: column; justify-content: center; gap: 5px; width: var(--tap-target); height: var(--tap-target); background: none; border: 1px solid var(--color-border); border-radius: var(--radius-sm); cursor: pointer; }
+.burger span { display: block; width: 22px; height: 2px; background: var(--color-text); margin-inline: auto; }
+
+/* --- Navigation principale ------------------------------------------------ */
+.main-nav { display: none; background: var(--color-surface-2); border-block-start: 1px solid var(--color-border); }
+.main-nav.is-open { display: block; }
+.main-nav__list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: var(--space-1); padding-block: var(--space-3); }
+.main-nav__list > li { display: flex; }
+.main-nav a:not(.btn), .main-nav .link-button {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-2) 0;
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+.main-nav a:not(.btn):hover, .main-nav .link-button:hover { color: var(--color-primary); text-decoration: none; }
+.main-nav__sep { display: none; }
+
+.lang-switch { display: flex; gap: var(--space-3); padding-block-start: var(--space-2); border-block-start: 1px solid var(--color-border); }
+.lang-switch a[aria-current="true"] { color: var(--color-primary); }
+
+.btn--nav { min-height: 2.25rem; padding-inline: var(--space-4); font-size: 0.85rem; }
+
+@media (min-width: 860px) {
+    .burger { display: none; }
+    .main-nav { display: block; background: transparent; border: 0; }
+    .main-nav__list { flex-direction: row; align-items: center; gap: var(--space-5); padding-block: var(--space-3); }
+    .main-nav__sep { display: block; flex: 1; }            /* pousse compte + langue à droite */
+    .lang-switch { border: 0; padding: 0; margin-inline-start: var(--space-2); gap: var(--space-2); }
+    .btn--nav { color: var(--color-on-primary); }          /* le bouton « S'inscrire » garde son texte clair */
+}
+
+/* --- Pied de page --------------------------------------------------------- */
+.site-footer { background: var(--color-surface); border-block-start: 1px solid var(--color-border); padding-block: var(--space-5); }
+.site-footer__inner { display: flex; flex-direction: column; gap: var(--space-3); }
+.site-footer nav { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+.site-footer__legal { color: var(--color-text-muted); margin: 0; }
+
+/* --- Carrousel d'accueil -------------------------------------------------- */
+.carousel { position: relative; border-radius: var(--radius); overflow: hidden; margin-block-end: var(--space-6); background: var(--color-surface); }
+.carousel__track { display: flex; transition: transform 0.4s ease; }
+.carousel__slide { min-width: 100%; position: relative; }
+.carousel__slide img { width: 100%; height: 320px; object-fit: cover; }
+.carousel__caption { position: absolute; inset-block-end: 0; inset-inline: 0; padding: var(--space-5); background: linear-gradient(transparent, rgba(0,0,0,0.75)); }
+.carousel__caption h2 { color: #fff; }
+.carousel__btn { position: absolute; inset-block-start: 50%; transform: translateY(-50%); width: var(--tap-target); height: var(--tap-target); border-radius: 50%; border: none; background: rgba(0,0,0,0.5); color: #fff; font-size: 1.5rem; cursor: pointer; }
+.carousel__btn--prev { inset-inline-start: var(--space-3); }
+.carousel__btn--next { inset-inline-end: var(--space-3); }
+
+/* --- Grilles produits / catégories ---------------------------------------- */
+.section-title { margin-block: var(--space-6) var(--space-4); }
+.category-grid, .product-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+.product-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12); border-color: var(--color-primary); }
+.product-card__link { display: block; padding-block-end: var(--space-4); color: var(--color-text); }
+.product-card__link:hover { text-decoration: none; }
+.product-card__image { width: 100%; height: 170px; object-fit: cover; background: var(--color-surface-2); border-block-end: 1px solid var(--color-border); }
+.product-card__name { padding-inline: var(--space-4); margin-block: var(--space-4) var(--space-1); font-size: 1.05rem; }
+.product-card__price { padding-inline: var(--space-4); font-size: 1.15rem; font-weight: 800; color: var(--color-primary); margin: 0; }
+.product-card__price span { color: var(--color-text-muted); font-weight: 400; font-size: 0.85rem; }
+.product-card--unavailable { opacity: 0.6; }
+.product-card--unavailable .product-card__price { color: var(--color-text-muted); }
+
+.category-card { display: block; position: relative; border-radius: var(--radius); overflow: hidden; min-height: 160px; background: var(--color-surface-2); color: #fff; }
+.category-card img { width: 100%; height: 160px; object-fit: cover; }
+.category-card span { position: absolute; inset-block-end: 0; inset-inline: 0; padding: var(--space-3); background: linear-gradient(transparent, rgba(0,0,0,0.8)); font-weight: 700; }
+
+/* --- Mise en page à deux colonnes (catalogue, recherche, compte) ---------- */
+.layout-sidebar { display: grid; gap: var(--space-5); }
+@media (min-width: 860px) { .layout-sidebar { grid-template-columns: 260px 1fr; } }
+
+/* --- Fiche produit -------------------------------------------------------- */
+.product-detail { display: grid; gap: var(--space-5); }
+@media (min-width: 860px) { .product-detail { grid-template-columns: 1fr 1fr; } }
+.product-detail__media img { width: 100%; border-radius: var(--radius); }
+.product-detail__price { font-size: 1.6rem; font-weight: 800; color: var(--color-primary); }
+.specs { list-style: none; padding: 0; }
+.specs li { padding-block: var(--space-2); border-block-end: 1px solid var(--color-border); }
+
+/* --- Panier & récap -------------------------------------------------------- */
+.cart-line { display: grid; grid-template-columns: 64px 1fr auto; gap: var(--space-4); align-items: center; padding-block: var(--space-4); border-block-end: 1px solid var(--color-border); }
+.cart-line img { width: 64px; height: 64px; object-fit: cover; border-radius: var(--radius-sm); }
+.cart-summary { display: flex; justify-content: space-between; align-items: center; font-size: 1.25rem; font-weight: 700; margin-block: var(--space-4); }
+.qty-form { display: inline-flex; gap: var(--space-2); align-items: center; }
+.qty-form input { width: 4.5rem; }
+
+/* --- Tunnel de commande --------------------------------------------------- */
+.checkout-grid { display: grid; gap: var(--space-5); }
+@media (min-width: 860px) { .checkout-grid { grid-template-columns: 1fr 360px; align-items: start; } }
+.steps { display: flex; gap: var(--space-2); list-style: none; padding: 0; margin-block-end: var(--space-5); flex-wrap: wrap; }
+.steps li { color: var(--color-text-muted); padding: var(--space-1) var(--space-3); border: 1px solid var(--color-border); border-radius: 999px; font-size: 0.85rem; }
+
+/* --- Espace client -------------------------------------------------------- */
+.account-nav { list-style: none; padding: 0; display: grid; gap: var(--space-1); }
+.account-nav a { display: block; padding: var(--space-2) var(--space-3); border-radius: var(--radius-sm); }
+.account-nav a:hover { background: var(--color-surface-2); text-decoration: none; }
+.year-group { margin-block-end: var(--space-6); }
+
+/* --- Affinages mobile (≤ 600px) ------------------------------------------- */
+@media (max-width: 600px) {
+    .main-content { padding-block: var(--space-5); }
+    /* Carrousel : moins haut pour ne pas occuper tout l'écran sur téléphone. */
+    .carousel__slide img { height: 200px; }
+    .carousel__caption { padding: var(--space-4); }
+    /* Récap panier : passe en colonne pour éviter le chevauchement prix/texte. */
+    .cart-summary { flex-direction: column; align-items: flex-start; gap: var(--space-1); }
+    /* Le logo reste lisible sans manger toute la largeur. */
+    .logo { font-size: 1.15rem; letter-spacing: 0.2em; }
+}
