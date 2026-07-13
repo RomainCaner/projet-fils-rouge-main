@@ -51,6 +51,17 @@ complément du code source et des documents propres au site web
 Les documents sont également disponibles au format **PDF** (schémas rendus en
 images) dans le dossier [`pdf/`](pdf/), prêts à être déposés :
 
+Bloc 3 :
+
+- `pdf/DAT_Dossier_Architecture_Technique.pdf`
+- `pdf/Pipeline_CICD.pdf`
+- `pdf/Supervision_et_logs.pdf`
+- `pdf/Plan_tests_performance.pdf`
+- `pdf/Gestion_incidents_et_bugs.pdf`
+- `pdf/Bilan_projet.pdf`
+
+Bloc 2 & transverses :
+
 - `pdf/DCT_Dossier_Conception_Technique.pdf`
 - `pdf/Cahier_de_recettes.pdf`
 - `pdf/Manuel_utilisateur.pdf`
